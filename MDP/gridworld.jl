@@ -193,3 +193,18 @@ function print_policy(π)
         end
     end
 end
+
+function value_iteration(T::Int; γ = 1)
+    v = zeros(16)
+    Q = zeros(4, 16)
+    coor = Matrix{Int}(reshape(vcat(15, 1:14, 16), 4, :)')
+    π = zeros(Int, 4, 16)
+    for t = 1:T
+        update_Q!(Q, v, coor)
+        v .= maximum(Q, dims = 1)[:]
+        if t == T
+            π[argmax(Q, dims = 1)] .= 1
+        end
+    end
+    print_policy(π)
+end
