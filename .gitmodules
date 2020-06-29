@@ -1,3 +1,6 @@
 [submodule "ZBL-introRL"]
 	path = ZBL-introRL
 	url = git@github.com:zhoubolei/introRL
+[submodule "cuhkrlcourse-RLexample"]
+	path = cuhkrlcourse-RLexample
+	url = git@github.com:cuhkrlcourse/RLexample.git
