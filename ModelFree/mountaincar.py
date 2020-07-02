@@ -1,6 +1,7 @@
 import numpy as np
-
 import gym
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 # source: https://github.com/MeepMoop/tilecoding/blob/master/tilecoding.py
 class TileCoder:
@@ -47,6 +48,25 @@ def run_episode(env, T = None, w=None, render=False):
             break
     return total_reward
 
+def plot(T, w, env_low, env_high):
+    # resolution
+    res = 200
+    x = np.arange(env_low[0], env_high[0], (env_high[0] - env_low[0]) / res )
+    y = np.arange(env_low[1], env_high[1], (env_high[1] - env_low[1]) / res )
+    z = np.zeros([len(x), len(y)])
+    for i in range(len(x)):
+        for j in range(len(y)):
+            z[i, j] = np.max(w[T[x[i], y[j]], :])
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    X, Y = np.meshgrid(x, y)
+    surf = ax.plot_surface(X, Y, -z, cmap = plt.get_cmap('hot'))
+    ax.set_xlabel("Position")
+    ax.set_ylabel("Velocity")
+    ax.set_title(f"Episode {iter_max}")
+    plt.show()
+
 if __name__ == '__main__':
     env_name = 'MountainCar-v0'
     env = gym.make(env_name)
@@ -89,4 +109,6 @@ if __name__ == '__main__':
     # Animate it
     for _ in range(2):
         run_episode(env, T, w, True)
+
+    # plot it
     env.close()
